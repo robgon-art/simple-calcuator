@@ -11,7 +11,6 @@
 │   │   ├── Button/                     # Individual calculator button
 │   │   └── History/                    # Lit component for calculation history
 │   ├── store/                          # MobX state management
-│   ├── context/                        # React Context
 │   ├── utils/                          # Pure calculation functions
 │   ├── types/                          # TypeScript type definitions
 │   ├── App.tsx
@@ -22,17 +21,26 @@
 
 ## Development Approach
 
-1. **Pure Calculation Logic**
+1. **Functional Programming**
+   - Emphasize immutable data structures
+   - Use pure functions for calculations and transformations
+   - Avoid side effects in business logic
+   - Leverage function composition for complex operations
+   - Separate data transformation from effects
+   - Handle state changes through well-defined interfaces
+
+
+2. **Pure Calculation Logic**
    - Create pure functions for all mathematical operations
    - Each function should have a single responsibility
    - All functions return new values rather than mutating existing ones
 
-2. **State Management**
+3. **State Management**
    - Use MobX for the calculator state (current input, previous inputs, operations)
    - Create observable store with computed values for derived state
    - React Context to provide store access throughout the component tree
 
-3. **Component Design**
+4. **Component Design**
    - Create small, focused components with single responsibilities
    - Button component handles single button presses
    - Keypad arranges and organizes buttons
@@ -47,6 +55,8 @@
    - Test store operations without UI components
    - Focus on behavior rather than implementation
    - Use given-when-then pattern for test organization
+   - Avoid mocks
+   - Use colocated test files
 
 2. **Component Tests (React Testing Library)**
    - Test components in isolation
@@ -65,4 +75,4 @@
    - Verify visual appearance and functionality
    - Test edge cases like large numbers and error states
 
-This approach ensures highly testable code without mocks by using functional programming principles and clean separation of concerns. 
+This approach ensures highly testable code without mocks by using functional programming principles and clean separation of concerns.

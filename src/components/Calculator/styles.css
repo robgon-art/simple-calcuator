@@ -1,0 +1,16 @@
+.calculator-container {
+    max-width: 360px;
+    margin: 2rem auto;
+    padding: 1.5rem;
+    border-radius: 12px;
+    background-color: white;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+}
+
+.calculator-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}

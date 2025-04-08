@@ -1,0 +1,14 @@
+.calculator-keypad {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.keypad-row {
+    display: flex;
+    justify-content: space-between;
+}
+
+.button-wide {
+    flex-grow: 2;
+}
