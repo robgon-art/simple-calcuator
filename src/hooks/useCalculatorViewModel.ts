@@ -1,0 +1,73 @@
+/**
+ * Hook to connect MobX store to CalculatorViewModel
+ */
+import { useCallback, useMemo } from "react";
+import { CalculatorModel, createCalculatorModel } from "../components/Calculator/CalculatorModel";
+import { CalculatorViewProps, mapToViewProps } from "../components/Calculator/CalculatorViewModel";
+import { calculatorStore } from "../store/calculatorStore";
+import { HistoryModel, createHistoryModel, createHistoryEntry } from "../components/History/HistoryModel";
+import { createHistoryViewModel } from "../components/History/HistoryViewModel";
+
+/**
+ * Hook that creates view props for the Calculator component from the MobX store
+ */
+export const useCalculatorViewModel = (): CalculatorViewProps => {
+    // Map store state to Calculator model using the factory function
+    const calculatorModel: CalculatorModel = useMemo(() => 
+        createCalculatorModel(
+            calculatorStore.currentValue,
+            calculatorStore.previousValue,
+            calculatorStore.currentOperation,
+            calculatorStore.shouldClearDisplay
+        ), [
+        calculatorStore.currentValue,
+        calculatorStore.previousValue,
+        calculatorStore.currentOperation,
+        calculatorStore.shouldClearDisplay
+    ]);
+
+    // Map store state to History model
+    const historyModel: HistoryModel = useMemo(() => {
+        const entries = calculatorStore.history.map(item =>
+            createHistoryEntry(item.expression, item.result)
+        );
+        return createHistoryModel(entries);
+    }, [calculatorStore.history]);
+
+    // Create function to handle model updates
+    const dispatchModelUpdate = useCallback((model: CalculatorModel) => {
+        // Update the store based on model changes
+        calculatorStore.currentValue = model.displayValue;
+        calculatorStore.previousValue = model.previousValue;
+        calculatorStore.currentOperation = model.currentOperation;
+        calculatorStore.shouldClearDisplay = model.shouldClearDisplay;
+    }, []);
+
+    // Create history view model
+    const historyViewModel = useMemo(() =>
+        createHistoryViewModel(historyModel, (entry) => {
+            // When a history entry is selected
+            calculatorStore.currentValue = entry.result;
+            calculatorStore.shouldClearDisplay = true;
+        }),
+        [historyModel]
+    );
+
+    // Map models to view props
+    return mapToViewProps(calculatorModel, historyViewModel, dispatchModelUpdate);
+};
+
+/**
+ * Returns a function to add items to history
+ */
+export const useHistoryActions = () => {
+    const addToHistory = useCallback((expression: string, result: string) => {
+        calculatorStore.addToHistory(expression, result);
+    }, []);
+
+    const clearHistory = useCallback(() => {
+        calculatorStore.clearHistory();
+    }, []);
+
+    return { addToHistory, clearHistory };
+}; 
