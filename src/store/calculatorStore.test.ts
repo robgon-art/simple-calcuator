@@ -131,10 +131,11 @@ describe('CalculatorStore Integration', () => {
             store.currentValue = '3';
             store.calculateResult();
             expect(store.history).toHaveLength(1);
-            expect(store.history[0]).toEqual({
+            expect(store.history[0]).toMatchObject({
                 expression: '7 + 3',
                 result: '10'
             });
+            expect(store.history[0]).toHaveProperty('timestamp');
         });
     });
 

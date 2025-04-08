@@ -1,9 +1,9 @@
 import { makeAutoObservable } from 'mobx';
-import { 
-    add, 
-    subtract, 
-    multiply, 
-    divide, 
+import {
+    add,
+    subtract,
+    multiply,
+    divide,
     appendDigit as appendDigitFn,
     CalculatorState
 } from '../utils/calculations';
@@ -13,6 +13,7 @@ export type OperationType = '+' | '-' | '*' | '/' | '=' | null;
 export interface CalculationHistoryItem {
     expression: string;
     result: string;
+    timestamp: number;
 }
 
 export class CalculatorStore {
@@ -98,8 +99,11 @@ export class CalculatorStore {
             // Format the result to avoid floating point issues
             const resultStr = Number.isInteger(result) ? result.toString() : result.toFixed(10).replace(/\.?0+$/, '');
 
+            const expression = `${this.previousValue} ${this.currentOperation} ${this.currentValue}`;
+            console.log('Adding to history:', expression, resultStr);
+
             // Add to history
-            this.addToHistory(`${this.previousValue} ${this.currentOperation} ${this.currentValue}`, resultStr);
+            this.addToHistory(expression, resultStr);
 
             this.currentValue = resultStr;
             this.currentOperation = null;
@@ -113,7 +117,14 @@ export class CalculatorStore {
 
     // Add an entry to calculation history
     addToHistory(expression: string, result: string) {
-        this.history.push({ expression, result });
+        const historyItem = {
+            expression,
+            result,
+            timestamp: Date.now()
+        };
+
+        this.history.push(historyItem);
+        console.log('History after adding item:', this.history);
     }
 
     // Clear the current value
@@ -132,6 +143,7 @@ export class CalculatorStore {
     // Clear the history
     clearHistory() {
         this.history = [];
+        console.log('History cleared');
     }
 }
 

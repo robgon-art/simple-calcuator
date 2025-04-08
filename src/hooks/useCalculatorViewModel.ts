@@ -13,7 +13,7 @@ import { createHistoryViewModel } from "../components/History/HistoryViewModel";
  */
 export const useCalculatorViewModel = (): CalculatorViewProps => {
     // Map store state to Calculator model using the factory function
-    const calculatorModel: CalculatorModel = useMemo(() => 
+    const calculatorModel: CalculatorModel = useMemo(() =>
         createCalculatorModel(
             calculatorStore.currentValue,
             calculatorStore.previousValue,
@@ -28,9 +28,14 @@ export const useCalculatorViewModel = (): CalculatorViewProps => {
 
     // Map store state to History model
     const historyModel: HistoryModel = useMemo(() => {
+        console.log('Store history items:', calculatorStore.history);
+
         const entries = calculatorStore.history.map(item =>
-            createHistoryEntry(item.expression, item.result)
+            createHistoryEntry(item.expression, item.result, item.timestamp)
         );
+
+        console.log('Mapped history entries:', entries);
+
         return createHistoryModel(entries);
     }, [calculatorStore.history]);
 
@@ -44,14 +49,17 @@ export const useCalculatorViewModel = (): CalculatorViewProps => {
     }, []);
 
     // Create history view model
-    const historyViewModel = useMemo(() =>
-        createHistoryViewModel(historyModel, (entry) => {
+    const historyViewModel = useMemo(() => {
+        const viewModel = createHistoryViewModel(historyModel, (entry) => {
             // When a history entry is selected
             calculatorStore.currentValue = entry.result;
             calculatorStore.shouldClearDisplay = true;
-        }),
-        [historyModel]
-    );
+        });
+
+        console.log('History view model props:', viewModel.viewProps);
+
+        return viewModel;
+    }, [historyModel]);
 
     // Map models to view props
     return mapToViewProps(calculatorModel, historyViewModel, dispatchModelUpdate);
