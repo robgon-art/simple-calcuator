@@ -4,10 +4,10 @@
     font-size: 1.2rem;
     font-weight: bold;
     cursor: pointer;
-    padding: 1rem;
+    padding: 2rem;
     margin: 0.25rem;
-    min-width: 3rem;
-    min-height: 3rem;
+    min-width: 2rem;
+    min-height: 2rem;
     display: flex;
     align-items: center;
     justify-content: center;
