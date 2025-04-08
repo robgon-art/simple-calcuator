@@ -4,22 +4,22 @@ import '@testing-library/jest-dom';
 import Keypad from './index';
 
 describe('Keypad Component', () => {
-    const mockNumberClick = vi.fn();
-    const mockOperatorClick = vi.fn();
-    const mockFunctionClick = vi.fn();
+    const exampleNumberClick = vi.fn();
+    const exampleOperatorClick = vi.fn();
+    const exampleFunctionClick = vi.fn();
 
     beforeEach(() => {
-        mockNumberClick.mockClear();
-        mockOperatorClick.mockClear();
-        mockFunctionClick.mockClear();
+        exampleNumberClick.mockClear();
+        exampleOperatorClick.mockClear();
+        exampleFunctionClick.mockClear();
     });
 
     it('renders all number buttons (0-9)', () => {
         render(
             <Keypad
-                onNumberClick={mockNumberClick}
-                onOperatorClick={mockOperatorClick}
-                onFunctionClick={mockFunctionClick}
+                onNumberClick={exampleNumberClick}
+                onOperatorClick={exampleOperatorClick}
+                onFunctionClick={exampleFunctionClick}
             />
         );
 
@@ -35,9 +35,9 @@ describe('Keypad Component', () => {
     it('renders all operator buttons', () => {
         render(
             <Keypad
-                onNumberClick={mockNumberClick}
-                onOperatorClick={mockOperatorClick}
-                onFunctionClick={mockFunctionClick}
+                onNumberClick={exampleNumberClick}
+                onOperatorClick={exampleOperatorClick}
+                onFunctionClick={exampleFunctionClick}
             />
         );
 
@@ -51,9 +51,9 @@ describe('Keypad Component', () => {
     it('renders all function buttons', () => {
         render(
             <Keypad
-                onNumberClick={mockNumberClick}
-                onOperatorClick={mockOperatorClick}
-                onFunctionClick={mockFunctionClick}
+                onNumberClick={exampleNumberClick}
+                onOperatorClick={exampleOperatorClick}
+                onFunctionClick={exampleFunctionClick}
             />
         );
 
@@ -67,63 +67,63 @@ describe('Keypad Component', () => {
     it('calls onNumberClick with correct digit when number buttons are clicked', () => {
         render(
             <Keypad
-                onNumberClick={mockNumberClick}
-                onOperatorClick={mockOperatorClick}
-                onFunctionClick={mockFunctionClick}
+                onNumberClick={exampleNumberClick}
+                onOperatorClick={exampleOperatorClick}
+                onFunctionClick={exampleFunctionClick}
             />
         );
 
         // Click on digit 5
         fireEvent.click(screen.getByTestId('button-5'));
-        expect(mockNumberClick).toHaveBeenCalledWith('5');
+        expect(exampleNumberClick).toHaveBeenCalledWith('5');
 
         // Click on decimal point
         fireEvent.click(screen.getByTestId('button-.'));
-        expect(mockNumberClick).toHaveBeenCalledWith('.');
+        expect(exampleNumberClick).toHaveBeenCalledWith('.');
     });
 
     it('calls onOperatorClick with correct operator when operator buttons are clicked', () => {
         render(
             <Keypad
-                onNumberClick={mockNumberClick}
-                onOperatorClick={mockOperatorClick}
-                onFunctionClick={mockFunctionClick}
+                onNumberClick={exampleNumberClick}
+                onOperatorClick={exampleOperatorClick}
+                onFunctionClick={exampleFunctionClick}
             />
         );
 
         // Click on addition
         fireEvent.click(screen.getByTestId('button-+'));
-        expect(mockOperatorClick).toHaveBeenCalledWith('+');
+        expect(exampleOperatorClick).toHaveBeenCalledWith('+');
 
         // Click on division
         fireEvent.click(screen.getByTestId('button-÷'));
-        expect(mockOperatorClick).toHaveBeenCalledWith('/');
+        expect(exampleOperatorClick).toHaveBeenCalledWith('/');
     });
 
     it('calls onFunctionClick with correct function when function buttons are clicked', () => {
         render(
             <Keypad
-                onNumberClick={mockNumberClick}
-                onOperatorClick={mockOperatorClick}
-                onFunctionClick={mockFunctionClick}
+                onNumberClick={exampleNumberClick}
+                onOperatorClick={exampleOperatorClick}
+                onFunctionClick={exampleFunctionClick}
             />
         );
 
         // Click on clear
         fireEvent.click(screen.getByTestId('button-C'));
-        expect(mockFunctionClick).toHaveBeenCalledWith('clear');
+        expect(exampleFunctionClick).toHaveBeenCalledWith('clear');
 
         // Click on equals
         fireEvent.click(screen.getByTestId('button-='));
-        expect(mockFunctionClick).toHaveBeenCalledWith('equals');
+        expect(exampleFunctionClick).toHaveBeenCalledWith('equals');
     });
 
     it('has the correct CSS class', () => {
         const { container } = render(
             <Keypad
-                onNumberClick={mockNumberClick}
-                onOperatorClick={mockOperatorClick}
-                onFunctionClick={mockFunctionClick}
+                onNumberClick={exampleNumberClick}
+                onOperatorClick={exampleOperatorClick}
+                onFunctionClick={exampleFunctionClick}
             />
         );
 

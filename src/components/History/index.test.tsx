@@ -5,13 +5,13 @@ import History from './index';
 import type { HistoryEntry } from './types';
 
 describe('History Component', () => {
-    const mockHistoryEntries: HistoryEntry[] = [
+    const exampleHistoryEntries: HistoryEntry[] = [
         { expression: '2 + 2', result: '4', timestamp: 1654321000000 },
         { expression: '3 * 4', result: '12', timestamp: 1654321100000 },
     ];
 
     it('renders correctly with history entries', () => {
-        render(<History entries={mockHistoryEntries} />);
+        render(<History entries={exampleHistoryEntries} />);
         const historyContainer = screen.getByTestId('calculator-history');
         expect(historyContainer).toBeInTheDocument();
         expect(historyContainer).toHaveClass('calculator-history');
@@ -25,7 +25,7 @@ describe('History Component', () => {
 
     it('passes entries to the lit-html template', () => {
         // Due to the lit-html implementation, we need to test the ref setup
-        const { rerender } = render(<History entries={mockHistoryEntries} />);
+        const { rerender } = render(<History entries={exampleHistoryEntries} />);
 
         // Testing a re-render with different entries
         const newEntries: HistoryEntry[] = [
@@ -39,10 +39,10 @@ describe('History Component', () => {
     });
 
     it('sets up the callback when onSelectEntry is provided', () => {
-        const mockSelectEntry = vi.fn();
+        const exampleSelectEntry = vi.fn();
         render(<History
-            entries={mockHistoryEntries}
-            onSelectEntry={mockSelectEntry}
+            entries={exampleHistoryEntries}
+            onSelectEntry={exampleSelectEntry}
         />);
 
         // Verify the history container is rendered with the callback setup
