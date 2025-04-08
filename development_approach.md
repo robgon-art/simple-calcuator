@@ -42,7 +42,7 @@
 
 ## Testing Strategy
 
-1. **Unit Tests (Vitest/RITEWay)**
+1. **Unit Tests (Vitest)**
    - Test pure calculation functions in isolation
    - Test store operations without UI components
    - Focus on behavior rather than implementation

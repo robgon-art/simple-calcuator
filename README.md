@@ -1,7 +1,14 @@
-# simple-calcuator
+# simple-calculator
 ## A simple calculator using React and TypeScript
 
-This project uses the following open-source components for development:
+This project uses the following components for development:
+
+- **Model, View, View Model Architecture (MVVM)**
+  - A software architectural pattern that separates the development of the graphical user interface (UI) from the business logic and data:
+  - **Model:** Represents the data and business logic of the application. In this calculator, it includes the core calculation functions and data structures.
+  - **View:** The user interface components that display information to the user. This includes React components for the calculator display, keypad, and buttons.
+  - **ViewModel:** Acts as a data converter that handles the communication between the View and Model. It uses MobX to manage state and provide data binding between the UI and business logic.
+
 
 - **Programming Languages and Frameworks:**
   - **TypeScript:** A superset of JavaScript that adds static typing, enhancing code quality and maintainability.
@@ -17,8 +24,6 @@ This project uses the following open-source components for development:
 
 - **Testing Frameworks:**
   - **Vitest:** A next-generation testing framework powered by Vite. It offers a Jest-compatible API and is designed for speed and simplicity in testing JavaScript and TypeScript projects.
-  - **Jest:** A widely-used testing framework for JavaScript applications, known for its ease of use and rich feature set, including support for mocks, snapshots, and asynchronous testing.
-  - **RITEWay:** A minimalistic testing library that emphasizes readability and simplicity, making it straightforward to write and understand tests.
 
 - **End-to-End Testing:**
   - **Playwright:** A framework for end-to-end testing that allows you to automate browser actions. It supports multiple browsers and is used to ensure that your application functions correctly from the user's perspective.
