@@ -1,4 +1,4 @@
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, action } from 'mobx';
 import {
     add,
     subtract,
@@ -33,7 +33,15 @@ export class CalculatorStore {
     history: CalculationHistoryItem[] = [];
 
     constructor() {
-        makeAutoObservable(this);
+        makeAutoObservable(this, {
+            appendDigit: action,
+            setOperation: action,
+            calculateResult: action,
+            addToHistory: action,
+            clearEntry: action,
+            clearAll: action,
+            clearHistory: action
+        });
     }
 
     // Add a digit to the current value
@@ -124,7 +132,7 @@ export class CalculatorStore {
         };
 
         this.history.push(historyItem);
-        console.log('History after adding item:', this.history);
+        console.log('History after adding item:', this.history.length, 'items', historyItem);
     }
 
     // Clear the current value

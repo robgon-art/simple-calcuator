@@ -20,7 +20,7 @@ export const divide = (a: number, b: number): number => {
 // Additional calculator operations
 export const percentage = (value: number): number => value / 100;
 
-export const negate = (value: number): number => 
+export const negate = (value: number): number =>
     value === 0 ? 0 : -value;
 
 export const squareRoot = (value: number): number => {
@@ -91,37 +91,39 @@ export const clearEntry = (state: CalculatorState): CalculatorState => ({
 
 // Apply pending operation
 export const calculateResult = (state: CalculatorState): CalculatorState => {
-    const { displayValue, previousValue, operation } = state;
-
-    if (previousValue === null || operation === null) {
+    if (!state.operation || state.operation === '=') {
         return state;
     }
 
-    const currentValue = parseFloat(displayValue);
+    const prev = parseFloat(String(state.previousValue));
+    const curr = parseFloat(state.displayValue);
+
     let result: number;
 
     try {
-        switch (operation) {
+        switch (state.operation) {
             case '+':
-                result = add(previousValue, currentValue);
+                result = add(prev, curr);
                 break;
             case '-':
-                result = subtract(previousValue, currentValue);
+                result = subtract(prev, curr);
                 break;
             case '*':
-                result = multiply(previousValue, currentValue);
+                result = multiply(prev, curr);
                 break;
             case '/':
-                result = divide(previousValue, currentValue);
+                result = divide(prev, curr);
                 break;
             default:
                 return state;
         }
 
+        // Format the result to avoid floating point issues
+        const resultStr = Number.isInteger(result) ? result.toString() : result.toFixed(10).replace(/\.?0+$/, '');
+
         return {
             ...state,
-            displayValue: String(result),
-            previousValue: null,
+            displayValue: resultStr,
             operation: null,
             resetDisplay: true
         };
@@ -129,7 +131,6 @@ export const calculateResult = (state: CalculatorState): CalculatorState => {
         return {
             ...state,
             displayValue: error instanceof Error ? error.message : 'Error',
-            previousValue: null,
             operation: null,
             resetDisplay: true
         };

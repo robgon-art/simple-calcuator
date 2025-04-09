@@ -12,6 +12,8 @@ export interface CalculatorModel {
     readonly previousValue: string;
     readonly currentOperation: OperationType;
     readonly shouldClearDisplay: boolean;
+    readonly historyExpression?: string;
+    readonly historyResult?: string;
 }
 
 /**

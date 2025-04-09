@@ -34,17 +34,17 @@ const createHistoryTemplate = (entries: HistoryEntry[], onSelectEntry?: (entry: 
 };
 
 // React component that wraps the Lit component
-const History: React.FC<HistoryProps> = ({ entries, onSelectEntry }) => {
+const History: React.FC<HistoryProps> = observer(({ entries, onSelectEntry }) => {
   const historyRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    console.log('History entries:', entries);
+    console.log('History component rendering with entries:', entries.length, entries);
     if (historyRef.current) {
       render(createHistoryTemplate(entries, onSelectEntry), historyRef.current);
     }
   }, [entries, onSelectEntry]);
 
   return <div className="calculator-history" ref={historyRef} data-testid="calculator-history"></div>;
-};
+});
 
-export default observer(History); 
+export default History; 

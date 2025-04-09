@@ -80,8 +80,20 @@ export const mapToViewProps = (
                 break;
             case 'equals':
                 if (model.currentOperation) {
+                    // Save the expression before calculating
+                    const expression = `${model.previousValue} ${model.currentOperation} ${model.displayValue}`;
                     const result = calculatePendingOperation(model);
-                    dispatch(result);
+
+                    // Log the historic calculation
+                    console.log('Adding to history from equals:', expression, result.displayValue);
+
+                    // This will dispatch model updates and let the useCalculatorViewModel hook 
+                    // update the store, which will handle adding to history
+                    dispatch({
+                        ...result,
+                        historyExpression: expression,
+                        historyResult: result.displayValue
+                    });
                 }
                 break;
             case 'percent':
@@ -120,13 +132,19 @@ const calculatePendingOperation = (model: CalculatorModel): CalculatorModel => {
     };
 
     try {
+        // Save the expression for history
+        const expression = `${model.previousValue} ${model.currentOperation} ${model.displayValue}`;
+
         const newState = calculateResult(calculatorState);
 
+        // Return with history information
         return {
             ...model,
             displayValue: newState.displayValue,
             currentOperation: null,
-            shouldClearDisplay: true
+            shouldClearDisplay: true,
+            historyExpression: expression,
+            historyResult: newState.displayValue
         };
     } catch (error) {
         return {
