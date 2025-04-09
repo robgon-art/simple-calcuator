@@ -164,3 +164,98 @@ test('should handle large number calculations', async ({ page }) => {
     // to allow for different display formats (scientific notation, rounding, etc.)
     expect(result).toMatch(/9998/);
 });
+
+// Phase 3: History tests
+
+test('should add calculation to history', async ({ page }) => {
+    const calculatorPage = new CalculatorPage(page);
+    await calculatorPage.goto();
+
+    // Perform a calculation
+    await calculatorPage.performCalculation('5', '+', '3');
+
+    // Wait for history to update
+    await page.waitForTimeout(500);
+
+    // Check that history container is visible
+    const isHistoryVisible = await calculatorPage.isHistoryVisible();
+    expect(isHistoryVisible).toBe(true);
+
+    // Check that the calculation appears in history
+    const historyContainsEntry = await calculatorPage.checkHistoryContains('5 + 3', '8');
+    expect(historyContainsEntry).toBe(true);
+});
+
+test('should show multiple entries in history', async ({ page }) => {
+    const calculatorPage = new CalculatorPage(page);
+    await calculatorPage.goto();
+
+    // Perform multiple calculations
+    await calculatorPage.performCalculation('2', '+', '2');
+    await calculatorPage.performCalculation('3', '*', '4');
+
+    // Get all history entries
+    const entries = await calculatorPage.getHistoryEntries();
+
+    // Check that we have at least 2 entries
+    expect(entries.length).toBeGreaterThanOrEqual(2);
+
+    // Verify the most recent calculations are in the history
+    const hasAddition = entries.some(entry =>
+        entry.expression?.includes('2 + 2') &&
+        entry.result?.includes('4'));
+
+    const hasMultiplication = entries.some(entry =>
+        entry.expression?.includes('3') &&
+        entry.expression?.includes('4') &&
+        entry.result?.includes('12'));
+
+    expect(hasAddition).toBe(true);
+    expect(hasMultiplication).toBe(true);
+});
+
+// Phase 3: Keyboard Navigation Tests
+
+test('should handle keyboard input for digits', async ({ page }) => {
+    const calculatorPage = new CalculatorPage(page);
+    await calculatorPage.goto();
+
+    // Type digits via keyboard
+    await calculatorPage.pressKeyboardDigit('4');
+    await calculatorPage.pressKeyboardDigit('5');
+    await calculatorPage.pressKeyboardDigit('6');
+
+    // Verify display shows correct number
+    const displayValue = await calculatorPage.getDisplayValue();
+    expect(displayValue).toContain('456');
+});
+
+test('should perform calculation using keyboard', async ({ page }) => {
+    const calculatorPage = new CalculatorPage(page);
+    await calculatorPage.goto();
+
+    // Calculate 7 + 8 using keyboard
+    const result = await calculatorPage.performKeyboardCalculation('7', '+', '8');
+
+    // Verify result is 15
+    expect(result).toContain('15');
+});
+
+test('should clear display using keyboard Escape key', async ({ page }) => {
+    const calculatorPage = new CalculatorPage(page);
+    await calculatorPage.goto();
+
+    // Enter some digits
+    await calculatorPage.enterNumber('789');
+
+    // Verify display shows 789
+    let displayValue = await calculatorPage.getDisplayValue();
+    expect(displayValue).toContain('789');
+
+    // Press Escape to clear
+    await calculatorPage.pressKeyboardClear();
+
+    // Verify display is cleared
+    displayValue = await calculatorPage.getDisplayValue();
+    expect(displayValue).toContain('0');
+});

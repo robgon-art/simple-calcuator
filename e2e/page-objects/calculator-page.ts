@@ -1,12 +1,19 @@
 import { Page, Locator } from '@playwright/test';
 
+interface HistoryEntry {
+    expression: string | null;
+    result: string | null;
+}
+
 export class CalculatorPage {
     readonly page: Page;
     readonly display: Locator;
+    readonly historyContainer: Locator;
 
     constructor(page: Page) {
         this.page = page;
         this.display = page.locator('[data-testid="calculator-input"]');
+        this.historyContainer = page.locator('[data-testid="calculator-history"]');
     }
 
     async goto() {
@@ -103,6 +110,101 @@ export class CalculatorPage {
         await this.enterNumber(num2);
 
         await this.pressEquals();
+
+        return this.getDisplayValue();
+    }
+
+    // History methods
+    async isHistoryVisible() {
+        const isVisible = await this.historyContainer.isVisible();
+        return isVisible;
+    }
+
+    async getHistoryEntries(): Promise<HistoryEntry[]> {
+        // Wait for history to update
+        await this.page.waitForTimeout(500);
+
+        // Check if history list exists
+        const historyList = this.page.locator('.history-list');
+        if (!(await historyList.isVisible())) {
+            console.log("History list not visible");
+            return [];
+        }
+
+        // Get all history items
+        const historyItems = this.page.locator('.history-item');
+        const count = await historyItems.count();
+        console.log(`Found ${count} history items`);
+
+        const entries: HistoryEntry[] = [];
+        for (let i = 0; i < count; i++) {
+            const expression = await historyItems.nth(i).locator('.history-expression').textContent();
+            const result = await historyItems.nth(i).locator('.history-result').textContent();
+            entries.push({ expression, result });
+        }
+
+        return entries;
+    }
+
+    async checkHistoryContains(expression: string, result: string) {
+        const entries = await this.getHistoryEntries();
+
+        // Find matching entry
+        return entries.some(entry =>
+            entry.expression?.includes(expression) &&
+            entry.result?.includes(result));
+    }
+
+    // Keyboard navigation methods
+    async pressKeyboardDigit(digit: string) {
+        await this.page.keyboard.press(digit);
+    }
+
+    async pressKeyboardDecimalPoint() {
+        await this.page.keyboard.press('.');
+    }
+
+    async pressKeyboardOperation(operation: '+' | '-' | '*' | '/') {
+        // For multiplication, we need to use Shift+8 on most keyboards
+        if (operation === '*') {
+            await this.page.keyboard.press('*');
+        } else {
+            await this.page.keyboard.press(operation);
+        }
+    }
+
+    async pressKeyboardEquals() {
+        await this.page.keyboard.press('Enter');
+    }
+
+    async pressKeyboardClear() {
+        await this.page.keyboard.press('Escape');
+    }
+
+    async performKeyboardCalculation(num1: string, operation: '+' | '-' | '*' | '/', num2: string) {
+        // Input first number via keyboard
+        for (const char of num1) {
+            if (char === '.') {
+                await this.pressKeyboardDecimalPoint();
+            } else {
+                await this.pressKeyboardDigit(char);
+            }
+        }
+
+        // Press operation
+        await this.pressKeyboardOperation(operation);
+
+        // Input second number
+        for (const char of num2) {
+            if (char === '.') {
+                await this.pressKeyboardDecimalPoint();
+            } else {
+                await this.pressKeyboardDigit(char);
+            }
+        }
+
+        // Press Enter for equals
+        await this.pressKeyboardEquals();
 
         return this.getDisplayValue();
     }

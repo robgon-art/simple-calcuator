@@ -42,6 +42,17 @@ npm run e2e:debug
   - Division by zero
   - Large number calculations
 
+### Phase 3: History and Keyboard Functionality
+- History display
+  - Single calculation history verification
+  - Multiple calculation history entries
+- Keyboard navigation
+  - Numeric input via keyboard
+  - Operations via keyboard (+, -, *, /)
+  - Enter key for equals
+  - Escape key for clear
+  - Complete calculations using keyboard only
+
 ## Adding New Tests
 
 1. Create new spec files in the `specs/` directory
@@ -51,6 +62,7 @@ npm run e2e:debug
 ## Future Improvements
 
 - Visual regression testing
-- Keyboard input testing
-- Multi-step calculation testing
-- Accessibility testing
+- Multi-step calculation testing 
+- Accessibility testing (WCAG compliance)
+- Mobile device simulation testing
+- Performance testing for large calculations
