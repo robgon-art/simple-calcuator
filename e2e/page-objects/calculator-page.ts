@@ -22,8 +22,36 @@ export class CalculatorPage {
         await this.page.locator(`button:has-text("${digit}")`).click();
     }
 
+    async pressDecimalPoint() {
+        await this.page.locator('button:has-text(".")').click();
+    }
+
     async pressOperation(operation: '+' | '-' | '*' | '/') {
-        await this.page.locator(`button:has-text("${operation}")`).click();
+        // Map programming operators to their UI equivalents
+        const operationMap = {
+            '+': '+',
+            '-': '-',
+            '*': '×', // Using the multiplication symbol
+            '/': '÷'  // Using the division symbol
+        };
+
+        const uiOperation = operationMap[operation];
+        console.log(`Looking for operation button: ${uiOperation}`);
+
+        try {
+            await this.page.locator(`button:has-text("${uiOperation}")`).click();
+        } catch (e) {
+            console.error(`Failed to click ${uiOperation}, trying alternate symbols`);
+
+            // Try alternative symbols as fallback
+            if (operation === '*') {
+                await this.page.locator('button:has-text("*"), button:has-text("x"), button:has-text("X")').first().click();
+            } else if (operation === '/') {
+                await this.page.locator('button:has-text("/"), button:has-text("\\")').first().click();
+            } else {
+                throw e; // Re-throw for other operations
+            }
+        }
     }
 
     async pressEquals() {
@@ -32,6 +60,16 @@ export class CalculatorPage {
 
     async pressClear() {
         await this.page.locator('button:has-text("C")').click();
+    }
+
+    async pressAllClear() {
+        const acButton = this.page.locator('button:has-text("AC"), button:has-text("CA"), button:has-text("CE")');
+        if (await acButton.count() > 0) {
+            await acButton.click();
+        } else {
+            await this.pressClear();
+            await this.pressClear();
+        }
     }
 
     async getDisplayValue() {
@@ -47,16 +85,22 @@ export class CalculatorPage {
         }
     }
 
-    async performCalculation(num1: string, operation: '+' | '-' | '*' | '/', num2: string) {
-        for (const digit of num1) {
-            await this.pressDigit(digit);
+    async enterNumber(number: string) {
+        for (const char of number) {
+            if (char === '.') {
+                await this.pressDecimalPoint();
+            } else {
+                await this.pressDigit(char);
+            }
         }
+    }
+
+    async performCalculation(num1: string, operation: '+' | '-' | '*' | '/', num2: string) {
+        await this.enterNumber(num1);
 
         await this.pressOperation(operation);
 
-        for (const digit of num2) {
-            await this.pressDigit(digit);
-        }
+        await this.enterNumber(num2);
 
         await this.pressEquals();
 
