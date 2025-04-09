@@ -12,10 +12,29 @@
     align-items: center;
     justify-content: center;
     transition: background-color 0.2s, transform 0.1s;
+    outline: none;
+}
+
+.calculator-button:focus {
+    outline: none;
+    box-shadow: none;
 }
 
 .calculator-button:active {
     transform: scale(0.95);
+}
+
+/* Adding styles for keyboard press animation */
+.calculator-button.active-key.number {
+    background-color: #e8eaeb;
+}
+
+.calculator-button.active-key.operator {
+    background-color: #c6c8cc;
+}
+
+.calculator-button.active-key.function {
+    background-color: #3b77db;
 }
 
 .calculator-button.number {

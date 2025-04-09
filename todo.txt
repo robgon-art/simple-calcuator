@@ -1,0 +1,5 @@
+[x] Hookup calculation history
+[x] Rename component files (i.e don't use index.tsx)
+[ ] Hookup keyboard entry
+[ ] Show full calculation in the top display and history
+[ ] Move the history panel to the right of the calculator
