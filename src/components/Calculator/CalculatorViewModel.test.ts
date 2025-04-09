@@ -154,5 +154,66 @@ describe('CalculatorViewModel', () => {
             const updatedModel = dispatch.mock.calls[0][0];
             expect(updatedModel.displayValue).toBe('-42');
         });
+
+        it('should handle division by zero error during equals operation', () => {
+            // Create model with a division by zero
+            const model = createCalculatorModel('0', '5', '/', false);
+            const historyModel = createHistoryModel();
+            const historyViewModel = createHistoryViewModel(historyModel, vi.fn());
+            const dispatch = vi.fn();
+
+            const viewProps = mapToViewProps(model, historyViewModel, dispatch);
+
+            // Simulate clicking equals
+            viewProps.onFunctionClick('equals');
+
+            // Verify error was handled
+            expect(dispatch).toHaveBeenCalledTimes(1);
+            const updatedModel = dispatch.mock.calls[0][0];
+            expect(updatedModel.displayValue).toBe('Division by zero');
+            expect(updatedModel.currentOperation).toBeNull();
+            expect(updatedModel.shouldClearDisplay).toBe(true);
+        });
+
+        it('should calculate pending operation for operator chain', () => {
+            // Create model with a pending operation and click another operator
+            const model = createCalculatorModel('5', '10', '+', false);
+            const historyModel = createHistoryModel();
+            const historyViewModel = createHistoryViewModel(historyModel, vi.fn());
+            const dispatch = vi.fn();
+
+            const viewProps = mapToViewProps(model, historyViewModel, dispatch);
+
+            // Simulate clicking another operator
+            viewProps.onOperatorClick('*');
+
+            // Verify first calculation was performed before setting new operator
+            expect(dispatch).toHaveBeenCalledTimes(1);
+            const updatedModel = dispatch.mock.calls[0][0];
+            expect(updatedModel.displayValue).toBe('15'); // 10 + 5 = 15
+            expect(updatedModel.previousValue).toBe('15');
+            expect(updatedModel.currentOperation).toBe('*');
+            expect(updatedModel.shouldClearDisplay).toBe(true);
+        });
+
+        it('should set history information when equals is clicked', () => {
+            // Create model with a pending operation
+            const model = createCalculatorModel('5', '10', '+', false);
+            const historyModel = createHistoryModel();
+            const historyViewModel = createHistoryViewModel(historyModel, vi.fn());
+            const dispatch = vi.fn();
+
+            const viewProps = mapToViewProps(model, historyViewModel, dispatch);
+
+            // Simulate clicking equals
+            viewProps.onFunctionClick('equals');
+
+            // Verify calculation was performed and history info was set
+            expect(dispatch).toHaveBeenCalledTimes(1);
+            const updatedModel = dispatch.mock.calls[0][0];
+            expect(updatedModel.displayValue).toBe('15'); // 10 + 5 = 15
+            expect(updatedModel.historyExpression).toBe('10 + 5');
+            expect(updatedModel.historyResult).toBe('15');
+        });
     });
 }); 

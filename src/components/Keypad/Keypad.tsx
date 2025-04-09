@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import Button from '../Button/Button';
 import './Keypad.css';
 
@@ -13,9 +13,6 @@ const Keypad: React.FC<KeypadProps> = ({
     onOperatorClick,
     onFunctionClick
 }) => {
-    // Create refs for all buttons
-    const buttonRefs = useRef<{[key: string]: HTMLButtonElement | null}>({});
-
     // Map keys to button elements
     const keyToButtonId: {[key: string]: string} = {
         '0': 'button-0',

@@ -3,7 +3,7 @@
  */
 import { CalculatorModel, createCalculatorModel, withDisplayValue, withOperation } from "./CalculatorModel";
 import { OperationType } from "../../store/calculatorStore";
-import { appendDigit, calculateResult, setOperation } from "../../utils/calculations";
+import { appendDigit, calculateResult } from "../../utils/calculations";
 import { HistoryViewModel } from "../History/HistoryViewModel";
 
 /**
