@@ -1,6 +1,6 @@
 import React from 'react';
-import Button from '../Button';
-import './styles.css';
+import Button from '../Button/Button';
+import './Keypad.css';
 
 interface KeypadProps {
     onNumberClick: (number: string) => void;

@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import '@testing-library/jest-dom';
-import Display from './index';
+import Display from './Display';
 
 describe('Display Component', () => {
     it('renders input and result correctly', () => {

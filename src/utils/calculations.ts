@@ -124,6 +124,7 @@ export const calculateResult = (state: CalculatorState): CalculatorState => {
         return {
             ...state,
             displayValue: resultStr,
+            previousValue: null,
             operation: null,
             resetDisplay: true
         };
@@ -131,6 +132,7 @@ export const calculateResult = (state: CalculatorState): CalculatorState => {
         return {
             ...state,
             displayValue: error instanceof Error ? error.message : 'Error',
+            previousValue: null,
             operation: null,
             resetDisplay: true
         };

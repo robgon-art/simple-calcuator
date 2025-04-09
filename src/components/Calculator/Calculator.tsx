@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
-import Display from '../Display';
-import Keypad from '../Keypad';
-import History from '../History';
-import './styles.css';
+import Display from '../Display/Display';
+import Keypad from '../Keypad/Keypad';
+import History from '../History/History';
+import './Calculator.css';
 import { useCalculatorViewModel } from '../../hooks/useCalculatorViewModel';
 import { observer } from 'mobx-react-lite';
 import { calculatorStore } from '../../store/calculatorStore';

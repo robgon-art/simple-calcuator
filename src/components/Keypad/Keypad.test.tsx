@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import '@testing-library/jest-dom';
-import Keypad from './index';
+import Keypad from './Keypad';
 
 describe('Keypad Component', () => {
     const exampleNumberClick = vi.fn();

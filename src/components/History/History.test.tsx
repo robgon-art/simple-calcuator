@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import '@testing-library/jest-dom';
-import History from './index';
+import History from './History';
 import type { HistoryEntry } from './types';
 
 describe('History Component', () => {
